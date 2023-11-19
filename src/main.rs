@@ -1,7 +1,6 @@
 use ansi_term::Color::{Purple, Red, White, RGB};
 use ansi_term::Style;
 use chrono::{DateTime, Local, Utc};
-use fnv::FnvHasher;
 use futures::TryStreamExt;
 use k8s_openapi::api::core::v1::Event;
 use k8s_openapi::apimachinery::pkg::apis::meta::v1::Time;
@@ -12,11 +11,10 @@ use kube::{
 };
 use std::collections::HashMap;
 use std::hash::Hasher;
-use std::ops::DerefMut;
 use std::sync::{Arc, Mutex};
 
 #[tokio::main]
-async fn main() -> Result<(), watcher::Error> {
+async fn main() -> anyhow::Result<(), watcher::Error> {
     let client = Client::try_default().await.unwrap();
     let red_bold_blink: Style = Red.bold().blink();
     let white_bold: Style = White.bold();

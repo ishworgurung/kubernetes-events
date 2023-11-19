@@ -8,11 +8,8 @@ kube = { version = "0.87.1", features = ["runtime", "derive"] }
 k8s-openapi = { version = "0.20.0", features = ["latest"] }
 tokio = { version = "1.32.0", features = ["full"] }
 anyhow = "1.0.75"
-comfy-table = "7.0.1"
 futures-util = "0.3.28"
 futures = "0.3.28"
 chrono = "0.4.31"
 ansi_term = "0.12.1"
-sha2 = { version = "0.10.7", features = [] }
-hex = "0.4.3"
 fnv = "1.0.7"
