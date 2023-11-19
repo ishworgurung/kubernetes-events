@@ -29,8 +29,6 @@ async fn main() -> Result<(), watcher::Error> {
     let w = watcher(events, watcher::Config::default())
         .applied_objects()
         .try_for_each(move |e| {
-            let hash_key_clone = String::with_capacity(5);
-
             // Outer scope. We clone the Arc's to move into the async block
             let seen_events_clone = seen_events.clone();
 
@@ -49,7 +47,6 @@ async fn main() -> Result<(), watcher::Error> {
                 let event_msg = e_clone.message.unwrap_or_default();
                 let event_type = e_clone.type_.unwrap();
                 let event_hash: u64 = fnv_hash(
-                    hash_key_clone.clone(),
                     event_timestamp_local,
                     event_source_component.clone(),
                     event_ns.clone(),
@@ -96,15 +93,14 @@ async fn main() -> Result<(), watcher::Error> {
 }
 
 fn fnv_hash(
-    hash_key: String,
     event_timestamp_local: DateTime<Local>,
     event_source_component: String,
     event_ns: String,
     event_type: String,
     event_msg: String,
 ) -> u64 {
-    let mut hash_key = hash_key.clone().as_str().to_string();
     let mut fnv_hasher = fnv::FnvHasher::default();
+    let mut hash_key = String::with_capacity(5);
 
     hash_key.push_str(event_timestamp_local.to_string().as_str());
     hash_key.push_str(&event_source_component);
