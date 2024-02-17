@@ -11,7 +11,8 @@ setup_registry() {
   local CLUSTER_NAME="kind-registry"
   local reg_name="${CLUSTER_NAME}"
   local reg_port='5000'
-  local is_running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
+  local is_running;
+  is_running="$(docker inspect -f '{{.State.Running}}' "${reg_name}" 2>/dev/null || true)"
   if [ "${is_running}" != 'true' ]; then
     docker run \
       -d --restart=always -p "${reg_port}:5000" --name "${reg_name}" \
@@ -38,8 +39,8 @@ deploy() {
   setup_kind
   local IMAGE_NAME="kubernetes-events"
 
-  docker build -t localhost:5000/${IMAGE_NAME}:${IMAGE_TAG} -f deployment/build/Dockerfile .
-  docker push localhost:5000/${IMAGE_NAME}:${IMAGE_TAG}
+  docker build -t "localhost:5000/${IMAGE_NAME}:${IMAGE_TAG}" -f deployment/build/Dockerfile .
+  docker push "localhost:5000/${IMAGE_NAME}:${IMAGE_TAG}"
   kubectl delete -f deployment/manifests/test-service.yaml --ignore-not-found=true
   kubectl apply -f deployment/manifests/test-service.yaml
 } && deploy

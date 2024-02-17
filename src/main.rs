@@ -27,7 +27,7 @@ async fn main() -> anyhow::Result<(), watcher::Error> {
     let w = watcher(events, watcher::Config::default())
         .applied_objects()
         .try_for_each(move |e| {
-            // Outer scope. We clone the Arc's to move into the async block
+            // Outer scope. We clone the ARC to move into the async block
             let seen_events_clone = seen_events.clone();
 
             async move {
